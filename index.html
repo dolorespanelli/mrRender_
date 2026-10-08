@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RenderMR · tu render tu proyecto</title>
+<link rel="icon" type="image/png" href="data/EXTRAS/MR.png">
 
 <!-- CONEXIÓN CON TIPOGRAFÍAS DE GOOGLE (POPPINS) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -237,7 +238,7 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .story.on span{color:var(--ink)}
 
 /* =========================================
-   GRILLA DE PROYECTOS Y CARRUSELES
+   GRILLA DE PROYECTOS Y CARRUSELES (MOBILE FIX)
 ========================================= */
 .feed{
   display:grid; grid-template-columns: repeat(2, 1fr);
@@ -248,20 +249,34 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .car{position:relative}
 
 .track{
-  display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
-  scrollbar-width:none; aspect-ratio:4/3; touch-action: pan-y;
+  display:flex; 
+  overflow-x:auto; 
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none; 
+  aspect-ratio:4/3; 
+  touch-action: pan-x pan-y; /* ARREGLADO: permite el deslizamiento horizontal fluido en móviles */
+  -webkit-overflow-scrolling: touch;
 }
 .track::-webkit-scrollbar{display:none}
 .track img{
-  flex:none;width:100%;height:100%;object-fit:cover;scroll-snap-align:center;
+  flex: 0 0 100%;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  scroll-snap-align:start;
 }
 
 /* =========================================
    CONTENEDOR DE VIDEO CON BOTÓN PLAY
 ========================================= */
 .video-box{
-  flex:none;width:100%;height:100%;position:relative;
-  scroll-snap-align:center;background:#000;cursor:pointer;
+  flex: 0 0 100%;
+  width:100%;
+  height:100%;
+  position:relative;
+  scroll-snap-align:start;
+  background:#000;
+  cursor:pointer;
 }
 .video-box video{
   width:100%;height:100%;object-fit:cover;display:block;
@@ -278,10 +293,18 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .video-box.playing .play-btn{opacity:0;pointer-events:none}
 .video-box.playing:hover .play-btn{opacity:0.6}
 
-/* Flechas y puntitos */
-.arrow{position:absolute;top:50%;translate:0 -50%;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:1.1rem;cursor:pointer;opacity:0;transition:opacity .25s;z-index:6}
-.car:hover .arrow{opacity:1}.arrow.prev{left:.7rem}.arrow.next{right:.7rem}
-@media(hover:none){.arrow{display:none}}
+/* Flechas y puntitos - ARREGLADOS PARA MÓVIL */
+.arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:50%;border:0;
+  background:rgba(0,0,0,.65);color:#fff;font-size:1.2rem;
+  cursor:pointer;opacity:0.85;transition:opacity .25s, background .25s;
+  z-index:6; display:flex; align-items:center; justify-content:center;
+}
+.car:hover .arrow{opacity:1}
+.arrow.prev{left:.7rem}
+.arrow.next{right:.7rem}
+
 .dots{position:absolute;bottom:.8rem;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:6}
 .dots b{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);transition:.25s}
 .dots b.on{background:#fff;width:18px;border-radius:4px}
@@ -520,7 +543,7 @@ function fallbackMedia(el) {
 const WA='https://wa.me/5492214080467';
 document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a.rel='noopener'});
 
-/* Script del Tragamonedas (Rota entre las 4 palabras cada 2.2s - ERROR CORREGIDO) */
+/* Script del Tragamonedas */
 (()=>{
   const t = document.getElementById('track'), n = 4;
   let i = 0;
@@ -549,10 +572,9 @@ document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a
 
 
 /* =========================================================================
-   LISTA DE PROYECTOS (5 PROYECTOS COMPLETOS Y ORDENADOS)
+   LISTA DE PROYECTOS (5 PROYECTOS COMPLETOS)
 ========================================================================= */
 const projects = [
-  // PROYECTO 1: MIAMI
   {
     title: "Miami",
     tag: "Arquitectura / Edificios",
@@ -572,59 +594,43 @@ const projects = [
       "data/miami/miami13.jpg"
     ]
   },
-  // PROYECTO 2: VIVIENDA 1 (Carpeta data/vivienda1/)
   {
     title: "Vivienda Bosque",
     tag: "Remodelación residencial",
     images: [
       "data/vivienda1/VB_(0).PNG",
-      
       "data/vivienda1/VB_(2).PNG",
-      
-      
-      
       "data/vivienda1/VB_(5).PNG",
       "data/vivienda1/VB_(7).PNG",
       "data/vivienda1/VB_(8).MP4",
       "data/vivienda1/VB_(3).PNG",
-      
       "data/vivienda1/VB_(11).PNG",
       "data/vivienda1/VB_(8).PNG",
       "data/vivienda1/VB_(9).MP4",
       "data/vivienda1/VB_(10).MP4",
-      
-      
       "data/vivienda1/VB_(15).MP4",
       "data/vivienda1/VB_(17).MP4",
-      
       "data/vivienda1/VB_(21).MP4",
       "data/vivienda1/VB_(23).PNG",
-      
-      
       "data/vivienda1/VB_(30).PNG",
       "data/vivienda1/VB_(31).PNG",
       "data/vivienda1/VB_(32).PNG",
       "data/vivienda1/VB_(33).PNG",
       "data/vivienda1/VB_(36).PNG",
       "data/vivienda1/VB_(37).PNG",
-      "data/vivienda1/VB_(38).PNG",
-      
-      
+      "data/vivienda1/VB_(38).PNG"
     ]
   },
-  // PROYECTO 3: EDIFICIO
   {
     title: "Edificio",
     tag: "Arquitectura / Edificios",
     images: [
       "data/Edificio/EDIFICIO_(3).PNG",
       "data/Edificio/EDIFICIO_(4).PNG",
-      
       "data/Edificio/EDIFICIO_(1).PNG",
       "data/Edificio/EDIFICIO_(2).JPG",
       "data/Edificio/EDIFICIO_(2).PNG",
       "data/Edificio/EDIFICIO_(3).JPG",
-      
       "data/Edificio/EDIFICIO_(4).PNG",
       "data/Edificio/EDIFICIO_(5).PNG",
       "data/Edificio/EDIFICIO_(6).PNG",
@@ -638,7 +644,6 @@ const projects = [
       "data/Edificio/EDIFICIO_(14).PNG"
     ]
   },
-  // PROYECTO 4: VIVIENDA 2
   {
     title: "Vivienda",
     tag: "Remodelación residencial",
@@ -661,7 +666,6 @@ const projects = [
       "data/vivienda2/viv2_ (8).mp4"
     ]
   },
-  // PROYECTO 5: VIVIENDA 3 (Carpeta data/vivienda3/)
   {
     title: "Vivienda 3",
     tag: "Remodelación residencial",
@@ -677,72 +681,20 @@ const projects = [
       "data/vivienda3/VB3_ (16).PNG",
       "data/vivienda3/VB3_ (14).PNG",
       "data/vivienda3/VB3_ (3).MP4",
-      
-      
       "data/vivienda3/VB3_ (4).PNG",
-      
-      
       "data/vivienda3/VB3_ (6).MP4",
       "data/vivienda3/VB3_ (6).PNG",
-      
       "data/vivienda3/VB3_ (2).MP4",
       "data/vivienda3/VB3_ (8).MP4",
-      
       "data/vivienda3/VB3_ (5).PNG",
       "data/vivienda3/VB3_ (9).MP4",
-      
       "data/vivienda3/VB3_ (10).PNG",
       "data/vivienda3/VB3_ (11).PNG",
-      
-      
-      
       "data/vivienda3/VB3_ (14).PNG",
       "data/vivienda3/VB3_ (13).PNG",
-      
-      "data/vivienda3/VB3_ (17).PNG",
-      
+      "data/vivienda3/VB3_ (17).PNG"
     ]
   }
-
-  /* =========================================================================
-     PROYECTOS EN ESPERA (DESCOMENTAR CUANDO QUIERAS SUMARLOS)
-  =========================================================================
-  ,{
-    title: "Proyecto 06",
-    tag: "Arquitectura / Edificios",
-    images: ["img/base.jpg", "img/base.jpg"]
-  },
-  {
-    title: "Proyecto 07",
-    tag: "Remodelación residencial",
-    images: ["img/base.jpg", "img/base.jpg"]
-  },
-  {
-    title: "Proyecto 08",
-    tag: "Arquitectura / Edificios",
-    images: ["img/base.jpg", "img/base.jpg", "img/base.jpg"] 
-  },
-  {
-    title: "Proyecto 09",
-    tag: "Remodelación residencial",
-    images: ["img/base.jpg", "img/base.jpg"]
-  },
-  {
-    title: "Proyecto 10",
-    tag: "Arquitectura / Edificios",
-    images: ["img/base.jpg"]
-  },
-  {
-    title: "Proyecto 11",
-    tag: "Remodelación residencial",
-    images: ["img/base.jpg", "img/base.jpg", "img/base.jpg"]
-  },
-  {
-    title: "Proyecto 12",
-    tag: "Arquitectura / Edificios",
-    images: ["img/base.jpg", "img/base.jpg"]
-  }
-  ========================================================================= */
 ];
 
 /* Generación de Cards de Proyectos */
@@ -799,8 +751,15 @@ projects.forEach((proj, k)=>{
         }
       });
     },{passive:true});
-    c.querySelector('.prev').onclick=()=>tr.scrollBy({left:-tr.clientWidth,behavior:'smooth'});
-    c.querySelector('.next').onclick=()=>tr.scrollBy({left:tr.clientWidth,behavior:'smooth'});
+
+    c.querySelector('.prev').onclick=(e)=>{
+      e.stopPropagation();
+      tr.scrollBy({left:-tr.clientWidth,behavior:'smooth'});
+    };
+    c.querySelector('.next').onclick=(e)=>{
+      e.stopPropagation();
+      tr.scrollBy({left:tr.clientWidth,behavior:'smooth'});
+    };
   }
 });
 
@@ -829,22 +788,16 @@ circulosData.forEach((item, idx) => {
   stories.appendChild(s);
 });
 
-/* Lógica precisa de selección activa de Stories */
+/* Lógica de selección activa de Stories */
 window.addEventListener('scroll', () => {
   const p1 = document.getElementById('p1');
   const p2 = document.getElementById('p2');
   if (!p1 || !p2) return;
 
-  const rect1 = p1.getBoundingClientRect();
   const rect2 = p2.getBoundingClientRect();
   const midScreen = window.innerHeight * 0.45;
 
-  let activeId = 'p1';
-  if (rect2.top <= midScreen) {
-    activeId = 'p2';
-  } else {
-    activeId = 'p1';
-  }
+  let activeId = (rect2.top <= midScreen) ? 'p2' : 'p1';
 
   document.querySelectorAll('.story').forEach(s => {
     s.classList.toggle('on', s.dataset.t === activeId);
