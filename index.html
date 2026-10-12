@@ -11,6 +11,38 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- FUNCIÓN DE RESCATE EN EL HEAD PARA QUE FUNCIONE DESDE LA PRIMERA IMAGEN -->
+<script>
+function fallbackMedia(el) {
+  let step = parseInt(el.dataset.fbStep || '0', 10);
+  let src = el.getAttribute('src');
+
+  // Si intentó buscar .webp o .avif y no existe, vuelve directo al archivo original exacto
+  if (el.dataset.orig && step === 0) {
+    el.dataset.fbStep = '1';
+    el.src = el.dataset.orig;
+    return;
+  }
+
+  // Fallback original de mayúsculas/minúsculas y espacios
+  if (step <= 1) {
+    el.dataset.fbStep = '2';
+    if (src.includes('.png')) el.src = src.replace('.png', '.PNG');
+    else if (src.includes('.PNG')) el.src = src.replace('.PNG', '.png');
+    else if (src.includes('.jpg')) el.src = src.replace('.jpg', '.JPG');
+    else if (src.includes('.JPG')) el.src = src.replace('.JPG', '.jpg');
+    else if (src.includes('.mp4')) el.src = src.replace('.mp4', '.MP4');
+    else if (src.includes('.MP4')) el.src = src.replace('.MP4', '.mp4');
+  } else if (step === 2) {
+    el.dataset.fbStep = '3';
+    if (src.includes('_ (')) el.src = src.replace('_ (', '_(');
+    else if (src.includes('_(')) el.src = src.replace('_(', '_ (');
+  } else {
+    el.onerror = null;
+  }
+}
+</script>
+
 <style>
 /* =========================================
    VARIABLES GLOBALES Y COLORES
@@ -116,7 +148,6 @@ a{color:inherit;text-decoration:none}
 .hero-loc{position:absolute;top:4.5rem;right:var(--pad);font-size:.85rem;font-weight:300;display:flex;align-items:center;gap:.5rem}
 .hero-loc::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
 
-/* Alineación estricta y limpia a la izquierda */
 .hero-body{
   padding-top:6rem;
   padding-bottom:2rem;
@@ -126,7 +157,6 @@ a{color:inherit;text-decoration:none}
   text-align:left;
 } 
 
-/* TÍTULO PRINCIPAL */
 h1{
   font-size: clamp(1.8rem, 4.8vw, 3.9rem);
   font-weight: 300;
@@ -141,9 +171,6 @@ h1 strong{font-weight: 600;}
 
 .hero p{
   margin-top: 1.5rem;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
   max-width: 55ch;
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   font-weight: 300;
@@ -154,8 +181,6 @@ h1 strong{font-weight: 600;}
 
 .hero-cta{
   margin-top: 2.5rem;
-  margin-left: 0;
-  padding: 0;
 }
 
 .hero-body h1, .hero-body p, .hero-body .hero-cta{
@@ -169,7 +194,7 @@ h1 strong{font-weight: 600;}
 }
 
 /* =========================================
-   ANIMACIÓN TRAGAMONEDAS (EN 2 RENGLONES CENTRADOS)
+   ANIMACIÓN TRAGAMONEDAS
 ========================================= */
 .band{
   background: #222; 
@@ -219,7 +244,6 @@ h1 strong{font-weight: 600;}
   justify-content: center;
 }
 
-/* DISTANCIA ENTRE SECCIONES */
 section{padding-block:clamp(2.5rem, 6vw, 2.8rem)}
 h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .sub{color:var(--mute);font-weight:300;margin-top:.4rem}
@@ -238,7 +262,7 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .story.on span{color:var(--ink)}
 
 /* =========================================
-   GRILLA DE PROYECTOS Y CARRUSELES (MOBILE FIX)
+   GRILLA DE PROYECTOS Y CARRUSELES
 ========================================= */
 .feed{
   display:grid; grid-template-columns: repeat(2, 1fr);
@@ -254,7 +278,7 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
   scroll-snap-type:x mandatory;
   scrollbar-width:none; 
   aspect-ratio:4/3; 
-  touch-action: pan-x pan-y; /* ARREGLADO: permite el deslizamiento horizontal fluido en móviles */
+  touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
 }
 .track::-webkit-scrollbar{display:none}
@@ -293,7 +317,6 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .video-box.playing .play-btn{opacity:0;pointer-events:none}
 .video-box.playing:hover .play-btn{opacity:0.6}
 
-/* Flechas y puntitos - ARREGLADOS PARA MÓVIL */
 .arrow{
   position:absolute;top:50%;transform:translateY(-50%);
   width:38px;height:38px;border-radius:50%;border:0;
@@ -330,7 +353,11 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .step .n{display:block;margin-top:1rem;font-size:1.6rem;font-weight:300;color:var(--green)}
 .step h3{font-weight:500;font-size:1rem}
 .step p{font-size:.85rem;color:var(--mute);font-weight:300}
-.step:not(:last-child)::after{content:"";position:absolute;top:calc(50% - 2rem);right:calc(-1 * clamp(.5rem,1.5vw,1.25rem) - 6px);width:12px;height:12px;border-top:2px solid var(--green);border-right:2px solid var(--green);rotate:45deg}
+.step:not(:last-child)::after{
+  content:"";position:absolute;top:calc(50% - 2rem);
+  right:calc(-1 * clamp(.5rem,1.5vw,1.25rem) - 6px);
+  width:12px;height:12px;border-top:2px solid var(--green);border-right:2px solid var(--green);rotate:45deg
+}
 .cta-row{margin-top:2.5rem}
 
 .svc{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,2.5rem);margin-top:2.5rem}
@@ -345,22 +372,10 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 ========================================= */
 footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 .foot{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:flex-end}
-.foot-brand{
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.foot-brand-info b{
-  font-weight:600;font-size:1.1rem;display:block;
-}
-.foot-brand-info span{
-  color:var(--mute);font-weight:300;font-size:.9rem;
-}
-.foot-logo-img{
-  height: 34px;
-  width: auto;
-  object-fit: contain;
-}
+.foot-brand{display:flex;align-items:center;gap:0.6rem}
+.foot-brand-info b{font-weight:600;font-size:1.1rem;display:block}
+.foot-brand-info span{color:var(--mute);font-weight:300;font-size:.9rem}
+.foot-logo-img{height:34px;width:auto;object-fit:contain}
 .foot nav{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;font-weight:300}
 .foot nav a:hover{color:var(--green)}
 
@@ -392,10 +407,10 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 </head>
 <body>
 
-<!-- NAVEGACIÓN SUPERIOR CON LOGO MR.png -->
+<!-- NAVEGACIÓN SUPERIOR CON LOGO -->
 <header class="top-nav">
   <div class="logo">
-    <img src="data/EXTRAS/MR.png" alt="Logo RenderMR" class="logo-img" onerror="fallbackMedia(this)">
+    <img src="data/EXTRAS/MR.webp" data-orig="data/EXTRAS/MR.png" alt="Logo RenderMR" class="logo-img" onerror="fallbackMedia(this)">
     <span>RenderMR</span>
   </div>
   <nav class="links">
@@ -405,9 +420,9 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </nav>
 </header>
 
-<!-- PORTADA (HERO): miami0.png -->
+<!-- PORTADA (HERO) -->
 <div class="hero" id="inicio">
-  <img class="hero-media-img" src="data/miami/miami0.png" alt="Portada Miami" onerror="fallbackMedia(this)">
+  <img class="hero-media-img" src="data/miami/miami0.webp" data-orig="data/miami/miami0.png" alt="Portada Miami" fetchpriority="high" decoding="async" onerror="fallbackMedia(this)">
   <span class="hero-loc">Miami, Florida.</span>
   <div class="wrap hero-body">
     <h1><strong>Visualizá tu proyecto </strong> <br> al ritmo de tus decisiones.</h1>
@@ -438,13 +453,9 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
     <h2>A la prueba me remito:</h2>
   </div>
   
-  <!-- Círculos (Stories) de accesos rápidos: exactamente 2 -->
   <div class="stories" style="margin-top:2rem"><div class="stories-row" id="stories"></div></div>
-  
-  <!-- Cards de proyectos (AQUÍ SE INYECTAN CON JS) -->
   <div class="feed" id="feed"></div>
   
-  <!-- BOTÓN STICKY -->
   <div class="proyectos-cta">
     <a class="btn" href="#contacto" data-wa>Cotizar mi idea</a>
   </div>
@@ -456,15 +467,15 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
     <h2>Así es el proceso</h2>
     <div class="steps">
       <div class="step">
-        <figure><img src="data/EXTRAS/boceto.jpg" alt="Bocetos y planos iniciales" loading="lazy" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/boceto.webp" data-orig="data/EXTRAS/boceto.jpg" alt="Bocetos y planos iniciales" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">1</span><h3>Contanos tu idea</h3>
       </div>
       <div class="step">
-        <figure><img src="data/EXTRAS/boc.png" alt="Volumetría" loading="lazy" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/boc.webp" data-orig="data/EXTRAS/boc.png" alt="Volumetría" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">2</span><h3>Enviános el material</h3>
       </div>
       <div class="step">
-        <figure><img src="data/EXTRAS/ren.png" alt="Render final" loading="lazy" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/ren.webp" data-orig="data/EXTRAS/ren.png" alt="Render final" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">3</span><h3>Recibí tus renders</h3>
       </div>
     </div>
@@ -478,22 +489,22 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
     <h2>+ servicios</h2>
     <div class="svc">
       <article>
-        <img src="data/EXTRAS/arqq.png" alt="Diseño Arquitectónico" loading="lazy" onerror="fallbackMedia(this)">
+        <img src="data/EXTRAS/arqq.webp" data-orig="data/EXTRAS/arqq.png" alt="Diseño Arquitectónico" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
         <div><h3>Diseño Arquitectónico</h3><p>Proyectos integrales desde el inicio.</p></div>
       </article>
       <article class="svc-2">
-        <img src="data/EXTRAS/diseñoInt.PNG" alt="Diseño de Interiores" loading="lazy" onerror="fallbackMedia(this)">
+        <img src="data/EXTRAS/diseñoInt.webp" data-orig="data/EXTRAS/diseñoInt.PNG" alt="Diseño de Interiores" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
         <div><h3>Diseño de Interiores</h3><p>Remodelaciones y rediseño de espacios.</p></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- FOOTER CON LOGO MR.png -->
+<!-- FOOTER -->
 <footer id="contacto">
   <div class="wrap foot">
     <div class="foot-brand">
-      <img src="data/EXTRAS/MR.png" alt="Logo RenderMR" class="foot-logo-img" onerror="fallbackMedia(this)">
+      <img src="data/EXTRAS/MR.webp" data-orig="data/EXTRAS/MR.png" alt="Logo RenderMR" class="foot-logo-img" loading="lazy" onerror="fallbackMedia(this)">
       <div class="foot-brand-info">
         <b>RenderMR</b>
         <span>tu render tu proyecto,</span>
@@ -515,30 +526,6 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 </div>
 
 <script>
-/* =========================================
-   FALLBACK AUTOMÁTICO DE EXTENSIONES Y ESPACIOS
-========================================= */
-function fallbackMedia(el) {
-  let step = parseInt(el.dataset.fbStep || '0', 10);
-  let src = el.getAttribute('src');
-
-  if (step === 0) {
-    el.dataset.fbStep = '1';
-    if (src.includes('.png')) el.src = src.replace('.png', '.PNG');
-    else if (src.includes('.PNG')) el.src = src.replace('.PNG', '.png');
-    else if (src.includes('.jpg')) el.src = src.replace('.jpg', '.JPG');
-    else if (src.includes('.JPG')) el.src = src.replace('.JPG', '.jpg');
-    else if (src.includes('.mp4')) el.src = src.replace('.mp4', '.MP4');
-    else if (src.includes('.MP4')) el.src = src.replace('.MP4', '.mp4');
-  } else if (step === 1) {
-    el.dataset.fbStep = '2';
-    if (src.includes('_ (')) el.src = src.replace('_ (', '_(');
-    else if (src.includes('_(')) el.src = src.replace('_(', '_ (');
-  } else {
-    el.onerror = null;
-  }
-}
-
 /* WhatsApp */
 const WA='https://wa.me/5492214080467';
 document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a.rel='noopener'});
@@ -570,9 +557,8 @@ document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a
   addEventListener('resize', () => go(false));
 })();
 
-
 /* =========================================================================
-   LISTA DE PROYECTOS (5 PROYECTOS COMPLETOS)
+   LISTA DE PROYECTOS (CON TUS NOMBRES ORIGINALES EXACTOS)
 ========================================================================= */
 const projects = [
   {
@@ -716,7 +702,9 @@ projects.forEach((proj, k)=>{
         </div>
       `;
     } else {
-      return `<img src="${src}" alt="${proj.title}, imagen ${j+1}" ${k ? 'loading="lazy"' : ''} onerror="fallbackMedia(this)">`;
+      // Intenta primero el .webp; si todavía no lo convertiste, carga instantáneamente tu .png/.jpg original
+      const webpSrc = src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+      return `<img src="${webpSrc}" data-orig="${src}" alt="${proj.title}, imagen ${j+1}" ${k > 1 ? 'loading="lazy"' : ''} decoding="async" onerror="fallbackMedia(this)">`;
     }
   }).join('');
 
@@ -775,15 +763,16 @@ function togglePlay(box) {
   }
 }
 
-/* GENERACIÓN EXACTA DE LOS 2 CÍRCULOS (Stories) */
+/* GENERACIÓN DE LOS 2 CÍRCULOS (Stories) */
 const circulosData = [
   { id: 'p1', title: 'Miami', img: 'data/miami/miami0.png' },
   { id: 'p2', title: 'Vivienda Bosque', img: 'data/vivienda1/VB_(0).PNG' }
 ];
 
 circulosData.forEach((item, idx) => {
+  const webpImg = item.img.replace(/\.(png|jpg|jpeg)$/i, '.webp');
   const s=document.createElement('button');s.className='story' + (idx === 0 ? ' on' : '');s.dataset.t=item.id;
-  s.innerHTML=`<i><img src="${item.img}" alt="${item.title}" onerror="fallbackMedia(this)"></i><span>${item.title}</span>`;
+  s.innerHTML=`<i><img src="${webpImg}" data-orig="${item.img}" alt="${item.title}" onerror="fallbackMedia(this)"></i><span>${item.title}</span>`;
   s.onclick=()=>document.getElementById(item.id).scrollIntoView({behavior:'smooth',block:'start'});
   stories.appendChild(s);
 });
