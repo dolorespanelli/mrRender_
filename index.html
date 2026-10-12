@@ -11,30 +11,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- FUNCIÓN DE RESCATE EN EL HEAD PARA QUE FUNCIONE DESDE LA PRIMERA IMAGEN -->
 <script>
+/* FALLBACK DE MAYÚSCULAS/MINÚSCULAS Y ESPACIOS */
 function fallbackMedia(el) {
   let step = parseInt(el.dataset.fbStep || '0', 10);
   let src = el.getAttribute('src');
+  if (!src) return;
 
-  // Si intentó buscar .webp o .avif y no existe, vuelve directo al archivo original exacto
-  if (el.dataset.orig && step === 0) {
+  if (step === 0) {
     el.dataset.fbStep = '1';
-    el.src = el.dataset.orig;
-    return;
-  }
-
-  // Fallback original de mayúsculas/minúsculas y espacios
-  if (step <= 1) {
-    el.dataset.fbStep = '2';
     if (src.includes('.png')) el.src = src.replace('.png', '.PNG');
     else if (src.includes('.PNG')) el.src = src.replace('.PNG', '.png');
     else if (src.includes('.jpg')) el.src = src.replace('.jpg', '.JPG');
     else if (src.includes('.JPG')) el.src = src.replace('.JPG', '.jpg');
     else if (src.includes('.mp4')) el.src = src.replace('.mp4', '.MP4');
     else if (src.includes('.MP4')) el.src = src.replace('.MP4', '.mp4');
-  } else if (step === 2) {
-    el.dataset.fbStep = '3';
+  } else if (step === 1) {
+    el.dataset.fbStep = '2';
     if (src.includes('_ (')) el.src = src.replace('_ (', '_(');
     else if (src.includes('_(')) el.src = src.replace('_(', '_ (');
   } else {
@@ -61,9 +54,6 @@ function fallbackMedia(el) {
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:5.5rem}
 
-/* =========================================
-   FONDO DE PLANCHA DE CORTE
-========================================= */
 body{
   font-family:'Poppins',system-ui,sans-serif;
   background-color:var(--bg);
@@ -83,7 +73,6 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px}
 .wrap{width:min(100%,var(--max));margin-inline:auto;padding-inline:var(--pad)}
 
-/* BOTONES GLOBALES */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;
   gap:.5rem;padding:1rem 2.2rem;border-radius:999px;
@@ -93,34 +82,19 @@ a{color:inherit;text-decoration:none}
 }
 .btn:hover{background:var(--green-d);transform:translateY(-2px)}
 
-/* =========================================
-   NAVEGACIÓN SUPERIOR
-========================================= */
+/* NAVEGACIÓN SUPERIOR */
 .top-nav {
   position: absolute; top: 0; left: 0; right: 0;
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.5rem var(--pad); z-index: 100;
 }
-.top-nav .logo { 
-  display: flex; 
-  align-items: center; 
-  gap: 0.6rem; 
-  font-weight: 700; 
-  font-size: 1.2rem; 
-  letter-spacing: -0.02em; 
-}
-.logo-img {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-}
+.top-nav .logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.02em; }
+.logo-img { height: 28px; width: auto; object-fit: contain; }
 .top-nav .links { display: flex; gap: 1.5rem; }
 .top-nav .links a { font-size: 0.9rem; font-weight: 400; transition: color 0.3s; text-transform: uppercase; letter-spacing: 0.05em; }
 .top-nav .links a:hover { color: var(--green); }
 
-/* =========================================
-   SECCIÓN HERO (PORTADA PRINCIPAL)
-========================================= */
+/* SECCIÓN HERO */
 .hero{
   position:relative;
   min-height:100svh;
@@ -162,9 +136,7 @@ h1{
   font-weight: 300;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  max-width: none;
   margin: 0;
-  padding: 0;
   text-align: left;
 }
 h1 strong{font-weight: 600;}
@@ -178,10 +150,7 @@ h1 strong{font-weight: 600;}
   line-height: 1.8;
   text-align: left;
 }
-
-.hero-cta{
-  margin-top: 2.5rem;
-}
+.hero-cta{ margin-top: 2.5rem; }
 
 .hero-body h1, .hero-body p, .hero-body .hero-cta{
   animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
@@ -193,64 +162,30 @@ h1 strong{font-weight: 600;}
   to{opacity:1;transform:translateY(0)}
 }
 
-/* =========================================
-   ANIMACIÓN TRAGAMONEDAS
-========================================= */
+/* ANIMACIÓN TRAGAMONEDAS */
 .band{
-  background: #222; 
-  color: var(--ink); 
+  background: #222; color: var(--ink); 
   padding-block: clamp(1.2rem, 3vw, 1.8rem);
-  border-top: 1px solid var(--line); 
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   text-align: center;
 }
-.slot-line{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.35rem;
-}
-.slot-pre{
-  font-size: clamp(0.85rem, 1.8vw, 1.1rem);
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--mute);
-}
+.slot-line{ display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.35rem; }
+.slot-pre{ font-size: clamp(0.85rem, 1.8vw, 1.1rem); font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mute); }
 .slot{
-  display: inline-block;
-  height: 1.3em;
-  overflow: hidden;
-  font-size: clamp(1.2rem, 3.5vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  position: relative;
-  text-align: center;
+  display: inline-block; height: 1.3em; overflow: hidden;
+  font-size: clamp(1.2rem, 3.5vw, 2rem); font-weight: 700; letter-spacing: -0.01em;
+  position: relative; text-align: center;
   -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
   mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
 }
-.slot-track{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  will-change: transform;
-}
-.slot-track span{
-  height: 1.3em;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.slot-track{ display: flex; flex-direction: column; align-items: center; will-change: transform; }
+.slot-track span{ height: 1.3em; white-space: nowrap; display: flex; align-items: center; justify-content: center; }
 
 section{padding-block:clamp(2.5rem, 6vw, 2.8rem)}
 h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .sub{color:var(--mute);font-weight:300;margin-top:.4rem}
 
-/* =========================================
-   CÍRCULOS DE ACCESO DIRECTO (STORIES)
-========================================= */
+/* STORIES */
 .stories{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .stories-row{display:flex;gap:1.5rem;overflow-x:auto;padding:.8rem var(--pad);scrollbar-width:none;max-width:var(--max);margin:auto; justify-content: center;}
 .stories-row::-webkit-scrollbar{display:none}
@@ -261,9 +196,7 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .story.on i,.story:hover i{border-color:var(--green)}
 .story.on span{color:var(--ink)}
 
-/* =========================================
-   GRILLA DE PROYECTOS Y CARRUSELES
-========================================= */
+/* GRILLA DE PROYECTOS Y CARRUSELES */
 .feed{
   display:grid; grid-template-columns: repeat(2, 1fr);
   gap:clamp(2.5rem,4vw,3.5rem); max-width:var(--max);
@@ -273,38 +206,24 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .car{position:relative}
 
 .track{
-  display:flex; 
-  overflow-x:auto; 
-  scroll-snap-type:x mandatory;
-  scrollbar-width:none; 
-  aspect-ratio:4/3; 
-  touch-action: pan-x pan-y;
-  -webkit-overflow-scrolling: touch;
+  display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+  scrollbar-width:none; aspect-ratio:4/3; 
+  touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch;
+  background:#111;
 }
 .track::-webkit-scrollbar{display:none}
 .track img{
-  flex: 0 0 100%;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  scroll-snap-align:start;
+  flex: 0 0 100%; width:100%; height:100%;
+  object-fit:cover; scroll-snap-align:start;
 }
 
-/* =========================================
-   CONTENEDOR DE VIDEO CON BOTÓN PLAY
-========================================= */
+/* CONTENEDOR DE VIDEO */
 .video-box{
-  flex: 0 0 100%;
-  width:100%;
-  height:100%;
-  position:relative;
-  scroll-snap-align:start;
-  background:#000;
-  cursor:pointer;
+  flex: 0 0 100%; width:100%; height:100%;
+  position:relative; scroll-snap-align:start;
+  background:#0d0d0d; cursor:pointer;
 }
-.video-box video{
-  width:100%;height:100%;object-fit:cover;display:block;
-}
+.video-box video{ width:100%;height:100%;object-fit:cover;display:block; }
 .play-btn{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,0.65);
@@ -334,22 +253,18 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .meta{padding:1.2rem 1.4rem}
 .meta h3{font-size:1.1rem;font-weight:600}.meta small{color:var(--mute);font-weight:300}
 
-/* BOTÓN FLOTANTE */
 .proyectos-cta {
   position: sticky; bottom: 2rem; display: flex; justify-content: center;
   z-index: 40; margin-top: 1.5rem; pointer-events: none; 
 }
 .proyectos-cta .btn { pointer-events: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); padding: 1rem 3.5rem; font-size: 1rem; }
 
-/* =========================================
-   PROCESO Y SERVICIOS
-========================================= */
+/* PROCESO Y SERVICIOS */
 .center{text-align:center}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,3vw,2.5rem);margin-top:2.5rem;counter-reset:s}
 .step{position:relative}
 .step figure{aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
 .step img{width:100%;height:100%;object-fit:cover}
-
 .step .n{display:block;margin-top:1rem;font-size:1.6rem;font-weight:300;color:var(--green)}
 .step h3{font-weight:500;font-size:1rem}
 .step p{font-size:.85rem;color:var(--mute);font-weight:300}
@@ -367,9 +282,7 @@ h2{font-size:clamp(1.5rem,3.6vw,2.4rem);font-weight:500;letter-spacing:-.01em}
 .svc h3{font-weight:500;font-size:1.2rem}.svc p{color:var(--mute);font-weight:300;font-size:.9rem;margin-top:.4rem}
 .svc-2 img{object-position:15% 60%}
 
-/* =========================================
-   FOOTER CON LOGO
-========================================= */
+/* FOOTER */
 footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 .foot{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:flex-end}
 .foot-brand{display:flex;align-items:center;gap:0.6rem}
@@ -379,14 +292,12 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 .foot nav{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;font-weight:300}
 .foot nav a:hover{color:var(--green)}
 
-/* ICONOS FLOTANTES */
 .float{position:fixed;right:clamp(.9rem,2.5vw,1.6rem);bottom:clamp(.9rem,2.5vw,1.6rem);z-index:50;display:flex;flex-direction:column;gap:.7rem}
 .float a{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;box-shadow:0 6px 22px rgba(0,0,0,.5);transition:transform .25s}
 .float a:hover{transform:scale(1.08)}
 .float svg{width:26px;height:26px;fill:#fff}
 .wa{background:#25a55a}.ig{background:linear-gradient(45deg,#f9a03c,#e1306c 55%,#833ab4)}
 
-/* RESPONSIVE */
 @media(max-width:760px){
   .hero-loc { top: 1.5rem; }
   .top-nav .links { display: none; } 
@@ -407,10 +318,9 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 </head>
 <body>
 
-<!-- NAVEGACIÓN SUPERIOR CON LOGO -->
 <header class="top-nav">
   <div class="logo">
-    <img src="data/EXTRAS/MR.webp" data-orig="data/EXTRAS/MR.png" alt="Logo RenderMR" class="logo-img" onerror="fallbackMedia(this)">
+    <img src="data/EXTRAS/MR.png" alt="Logo RenderMR" class="logo-img" onerror="fallbackMedia(this)">
     <span>RenderMR</span>
   </div>
   <nav class="links">
@@ -420,9 +330,8 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </nav>
 </header>
 
-<!-- PORTADA (HERO) -->
 <div class="hero" id="inicio">
-  <img class="hero-media-img" src="data/miami/miami0.webp" data-orig="data/miami/miami0.png" alt="Portada Miami" fetchpriority="high" decoding="async" onerror="fallbackMedia(this)">
+  <img class="hero-media-img" src="data/miami/miami0.png" alt="Portada Miami" fetchpriority="high" decoding="async" onerror="fallbackMedia(this)">
   <span class="hero-loc">Miami, Florida.</span>
   <div class="wrap hero-body">
     <h1><strong>Visualizá tu proyecto </strong> <br> al ritmo de tus decisiones.</h1>
@@ -431,7 +340,6 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </div>
 </div>
 
-<!-- BANDA ANIMADA TRAGAMONEDAS -->
 <div class="band" aria-label="Hagamos renders, productos, diseño arquitectónico, diseño de interiores">
   <div class="slot-line">
     <span class="slot-pre">Hagamos</span>
@@ -447,35 +355,31 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </div>
 </div>
 
-<!-- SECCIÓN DE LA GALERÍA DE PROYECTOS -->
 <section id="proyectos" style="position: relative;">
   <div class="wrap center">
     <h2>A la prueba me remito:</h2>
   </div>
-  
   <div class="stories" style="margin-top:2rem"><div class="stories-row" id="stories"></div></div>
   <div class="feed" id="feed"></div>
-  
   <div class="proyectos-cta">
     <a class="btn" href="#contacto" data-wa>Cotizar mi idea</a>
   </div>
 </section>
 
-<!-- SECCIÓN PROCESO -->
 <section id="proceso">
   <div class="wrap center">
     <h2>Así es el proceso</h2>
     <div class="steps">
       <div class="step">
-        <figure><img src="data/EXTRAS/boceto.webp" data-orig="data/EXTRAS/boceto.jpg" alt="Bocetos y planos iniciales" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/boceto.jpg" alt="Bocetos y planos iniciales" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">1</span><h3>Contanos tu idea</h3>
       </div>
       <div class="step">
-        <figure><img src="data/EXTRAS/boc.webp" data-orig="data/EXTRAS/boc.png" alt="Volumetría" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/boc.png" alt="Volumetría" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">2</span><h3>Enviános el material</h3>
       </div>
       <div class="step">
-        <figure><img src="data/EXTRAS/ren.webp" data-orig="data/EXTRAS/ren.png" alt="Render final" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
+        <figure><img src="data/EXTRAS/ren.png" alt="Render final" loading="lazy" decoding="async" onerror="fallbackMedia(this)"></figure>
         <span class="n">3</span><h3>Recibí tus renders</h3>
       </div>
     </div>
@@ -483,28 +387,26 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </div>
 </section>
 
-<!-- SECCIÓN SERVICIOS -->
 <section id="servicios">
   <div class="wrap center">
     <h2>+ servicios</h2>
     <div class="svc">
       <article>
-        <img src="data/EXTRAS/arqq.webp" data-orig="data/EXTRAS/arqq.png" alt="Diseño Arquitectónico" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
+        <img src="data/EXTRAS/arqq.png" alt="Diseño Arquitectónico" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
         <div><h3>Diseño Arquitectónico</h3><p>Proyectos integrales desde el inicio.</p></div>
       </article>
       <article class="svc-2">
-        <img src="data/EXTRAS/diseñoInt.webp" data-orig="data/EXTRAS/diseñoInt.PNG" alt="Diseño de Interiores" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
+        <img src="data/EXTRAS/diseñoInt.PNG" alt="Diseño de Interiores" loading="lazy" decoding="async" onerror="fallbackMedia(this)">
         <div><h3>Diseño de Interiores</h3><p>Remodelaciones y rediseño de espacios.</p></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer id="contacto">
   <div class="wrap foot">
     <div class="foot-brand">
-      <img src="data/EXTRAS/MR.webp" data-orig="data/EXTRAS/MR.png" alt="Logo RenderMR" class="foot-logo-img" loading="lazy" onerror="fallbackMedia(this)">
+      <img src="data/EXTRAS/MR.png" alt="Logo RenderMR" class="foot-logo-img" loading="lazy" onerror="fallbackMedia(this)">
       <div class="foot-brand-info">
         <b>RenderMR</b>
         <span>tu render tu proyecto,</span>
@@ -517,7 +419,6 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
   </div>
 </footer>
 
-<!-- FLOTANTES WHATSAPP E INSTAGRAM -->
 <div class="float">
   <a class="ig" href="https://instagram.com/render.mr_" target="_blank" rel="noopener" aria-label="Instagram">
     <svg viewBox="0 0 24 24"><path d="M12 7.2A4.8 4.8 0 1 0 12 16.8 4.8 4.8 0 0 0 12 7.2Zm0 7.9a3.1 3.1 0 1 1 0-6.2 3.1 3.1 0 0 1 0 6.2ZM17.2 5.6a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2ZM12 2.2c-2.7 0-3 0-4 .1-1.1 0-1.800.2-2.400.5a4.900 4.900 0 0 0-1.800 1.200A4.900 4.900 0 0 0 2.600 6c-.3.6-.4 1.300-.5 2.400C2.100 9.500 2 9.800 2 12s0 2.500.1 3.600c.1 1.100.2 1.800.5 2.400.2.700.6 1.200 1.200 1.800.6.600 1.100 1 1.800 1.200.6.3 1.300.4 2.400.5 1.100 0 1.400.1 4 .1s2.900 0 4-.1c1.100-.1 1.800-.2 2.400-.5a5 5 0 0 0 1.800-1.200c.6-.6 1-1.100 1.200-1.800.3-.6.4-1.300.5-2.400.1-1.100.1-1.400.1-3.600s0-2.500-.1-3.600c-.1-1.100-.2-1.800-.5-2.400a5 5 0 0 0-1.200-1.800A4.900 4.900 0 0 0 18 2.800c-.6-.3-1.300-.4-2.400-.5-1.100-.1-1.400-.1-3.600-.1Zm0 1.600c2.600 0 3 0 4 .1.900 0 1.400.2 1.800.3.500.2.800.4 1.100.7.300.3.600.6.700 1.100.1.300.3.900.3 1.800.1 1 .1 1.300.1 4s0 3-.1 4c0 .9-.2 1.400-.3 1.800-.2.500-.4.800-.7 1.100-.3.300-.6.600-1.100.7-.3.100-.9.300-1.800.3-1 .1-1.300.1-4 .1s-3 0-4-.1c-.9 0-1.400-.2-1.800-.3-.5-.2-.8-.4-1.100-.7-.3-.3-.6-.6-.7-1.100-.1-.3-.3-.9-.3-1.800-.1-1-.1-1.300-.1-4s0-3 .1-4c0-.9.2-1.400.3-1.800.2-.5.400-.8.7-1.100.3-.3.600-.6 1.100-.7.300-.1.900-.3 1.800-.3 1-.1 1.400-.1 4-.1Z"/></svg></a>
@@ -526,11 +427,10 @@ footer{border-top:1px solid var(--line);padding-block:2.5rem 6rem}
 </div>
 
 <script>
-/* WhatsApp */
 const WA='https://wa.me/5492214080467';
 document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a.rel='noopener'});
 
-/* Script del Tragamonedas */
+/* Tragamonedas */
 (()=>{
   const t = document.getElementById('track'), n = 4;
   let i = 0;
@@ -547,19 +447,13 @@ document.querySelectorAll('[data-wa]').forEach(a=>{a.href=WA;a.target='_blank';a
     i++;
     go(true);
     if(i === n) {
-      setTimeout(() => {
-        i = 0;
-        go(false);
-      }, 950);
+      setTimeout(() => { i = 0; go(false); }, 950);
     }
   }, 2200);
 
   addEventListener('resize', () => go(false));
 })();
 
-/* =========================================================================
-   LISTA DE PROYECTOS (CON TUS NOMBRES ORIGINALES EXACTOS)
-========================================================================= */
 const projects = [
   {
     title: "Miami",
@@ -683,8 +577,25 @@ const projects = [
   }
 ];
 
-/* Generación de Cards de Proyectos */
 const feed=document.getElementById('feed'),stories=document.getElementById('stories');
+
+/* Carga diferida real para fotos ocultas en el carrusel */
+function loadSlideMedia(track, idx) {
+  [idx - 1, idx, idx + 1].forEach(i => {
+    const el = track.children[i];
+    if (!el) return;
+    if (el.tagName === 'IMG' && el.dataset.src) {
+      el.src = el.dataset.src;
+      delete el.dataset.src;
+    } else if (el.classList.contains('video-box')) {
+      const v = el.querySelector('video');
+      if (v && v.dataset.src) {
+        v.src = v.dataset.src;
+        delete v.dataset.src;
+      }
+    }
+  });
+}
 
 projects.forEach((proj, k)=>{
   const id='p'+(k+1);
@@ -693,24 +604,27 @@ projects.forEach((proj, k)=>{
   const mediaHTML = proj.images.map((src, j) => {
     const isVideo = src.toLowerCase().endsWith('.mp4');
     if (isVideo) {
+      /* Solo el primer slide tiene src inmediato; el resto se conecta al deslizar */
+      const attr = j === 0 ? `src="${src}" preload="metadata"` : `data-src="${src}" preload="none"`;
       return `
         <div class="video-box" onclick="togglePlay(this)">
-          <video src="${src}" loop playsinline muted preload="metadata" onerror="fallbackMedia(this)"></video>
+          <video ${attr} loop playsinline muted onerror="fallbackMedia(this)"></video>
           <div class="play-btn">
             <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
           </div>
         </div>
       `;
     } else {
-      // Intenta primero el .webp; si todavía no lo convertiste, carga instantáneamente tu .png/.jpg original
-      const webpSrc = src.replace(/\.(png|jpg|jpeg)$/i, '.webp');
-      return `<img src="${webpSrc}" data-orig="${src}" alt="${proj.title}, imagen ${j+1}" ${k > 1 ? 'loading="lazy"' : ''} decoding="async" onerror="fallbackMedia(this)">`;
+      /* Solo la foto 1 y 2 de cada tarjeta se pide al inicio; las demás al deslizar */
+      if (j <= 1) {
+        return `<img src="${src}" alt="${proj.title}, imagen ${j+1}" ${k > 0 ? 'loading="lazy"' : ''} decoding="async" onerror="fallbackMedia(this)">`;
+      } else {
+        return `<img data-src="${src}" alt="${proj.title}, imagen ${j+1}" decoding="async" onerror="fallbackMedia(this)">`;
+      }
     }
   }).join('');
 
-  const puntosHTML = proj.images.map((_, j) => 
-    `<b class="${j ? '' : 'on'}"></b>`
-  ).join('');
+  const puntosHTML = proj.images.map((_, j) => `<b class="${j ? '' : 'on'}"></b>`).join('');
 
   c.innerHTML=`
     <div class="car">
@@ -728,6 +642,7 @@ projects.forEach((proj, k)=>{
     tr.addEventListener('scroll',()=>{
       const j=Math.round(tr.scrollLeft/tr.clientWidth);
       dots.forEach((d,x)=>d.classList.toggle('on',x===j));
+      loadSlideMedia(tr, j);
       
       tr.querySelectorAll('.video-box').forEach(box => {
         const v = box.querySelector('video');
@@ -751,9 +666,12 @@ projects.forEach((proj, k)=>{
   }
 });
 
-/* Control de Play / Pausa */
 function togglePlay(box) {
   const video = box.querySelector('video');
+  if (video.dataset.src) {
+    video.src = video.dataset.src;
+    delete video.dataset.src;
+  }
   if (video.paused) {
     video.play();
     box.classList.add('playing');
@@ -763,31 +681,25 @@ function togglePlay(box) {
   }
 }
 
-/* GENERACIÓN DE LOS 2 CÍRCULOS (Stories) */
 const circulosData = [
   { id: 'p1', title: 'Miami', img: 'data/miami/miami0.png' },
   { id: 'p2', title: 'Vivienda Bosque', img: 'data/vivienda1/VB_(0).PNG' }
 ];
 
 circulosData.forEach((item, idx) => {
-  const webpImg = item.img.replace(/\.(png|jpg|jpeg)$/i, '.webp');
   const s=document.createElement('button');s.className='story' + (idx === 0 ? ' on' : '');s.dataset.t=item.id;
-  s.innerHTML=`<i><img src="${webpImg}" data-orig="${item.img}" alt="${item.title}" onerror="fallbackMedia(this)"></i><span>${item.title}</span>`;
+  s.innerHTML=`<i><img src="${item.img}" alt="${item.title}" onerror="fallbackMedia(this)"></i><span>${item.title}</span>`;
   s.onclick=()=>document.getElementById(item.id).scrollIntoView({behavior:'smooth',block:'start'});
   stories.appendChild(s);
 });
 
-/* Lógica de selección activa de Stories */
 window.addEventListener('scroll', () => {
   const p1 = document.getElementById('p1');
   const p2 = document.getElementById('p2');
   if (!p1 || !p2) return;
-
   const rect2 = p2.getBoundingClientRect();
   const midScreen = window.innerHeight * 0.45;
-
   let activeId = (rect2.top <= midScreen) ? 'p2' : 'p1';
-
   document.querySelectorAll('.story').forEach(s => {
     s.classList.toggle('on', s.dataset.t === activeId);
   });
